@@ -33,12 +33,12 @@ function prettystack(ex) {
 }
 
 export default function compile(code) {
+    const startTime = performance.now();
+    const warnings = [];
     try {
-        console.time('compile');
         const compiled = Babel.transform(code, { presets: ["es2015", "react", "stage-2"]});
         const run = new Function('require', 'exports', 'importlist', compiled.code);
         const out = {};
-        const warnings = [];
         const mockrequire = (req) => {
             const res = mainfiles[req];
             if (res) {
@@ -49,12 +49,15 @@ export default function compile(code) {
 
         run(mockrequire, out, Object.keys(mainfiles));
 
-        console.timeEnd('compile');
+        const endTime = performance.now();
+        const time = endTime - startTime;
         if (warnings.length > 0) {
-            return { warnings };
+            return { warnings, time };
         }
-        return { component: out.default };
+        return { component: out.default, warnings, time };
     } catch (e) {
-        return { error: prettystack(e.stack) };
+        const endTime = performance.now();
+        const time = endTime - startTime;
+        return { error: prettystack(e.stack), warnings, time };
     }
 }

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import _throttle from 'lodash.throttle';
 import classNames from 'classnames';
+import LZString from 'lz-string';
 import compile from './sandboxUtils';
 import { Textarea } from './../../../../../packages/node_modules/nav-frontend-skjema';
 import './styles.less';
 
 const visningsCls = (compiledComponent) => classNames('sandboxPage__visning', {
     'sandboxPage__visning--error': compiledComponent.error,
-    'sandboxPage__visning--warning': compiledComponent.warnings
+    'sandboxPage__visning--warning': compiledComponent.warnings.length > 0
 });
 
 const testScript = `import React from 'react';
@@ -32,7 +33,7 @@ function TestComp() {
                 </Normaltekst>
             </Panel>
             <EkspanderbartPanel tittelProps="undertittel" tittel="Tilgjengelige imports">
-                {importlist.map((imp) => <p>{imp}</p>)}
+                {importlist.map((imp) => <p key={imp}>{imp}</p>)}
             </EkspanderbartPanel>
         </div>
     );
@@ -40,8 +41,21 @@ function TestComp() {
 
 export default TestComp;`;
 
+function getInitialState(props) {
+    let initialCode = testScript;
+
+    if (props.match.params.urlCode && props.match.params.urlCode.length > 0) {
+        initialCode = LZString.decompressFromEncodedURIComponent(props.match.params.urlCode);
+    }
+
+    return {
+        value: initialCode,
+        compiledComponent: compile(initialCode)
+    };
+}
+
 class SandboxPage extends Component {
-    state = { value: testScript, compiledComponent: compile(testScript) };
+    state = getInitialState(this.props);
     update = (e) => {
         const newCode = e.target.value;
         this.setState({ value: newCode });
@@ -49,6 +63,8 @@ class SandboxPage extends Component {
     };
     compileScript = _throttle((newCode) => {
         const compiledComponent = compile(newCode);
+        const urlCode = LZString.compressToEncodedURIComponent(newCode);
+        this.props.history.replace(`/sandbox/${urlCode}`);
         this.setState({ compiledComponent });
     }, 100);
 
@@ -57,7 +73,8 @@ class SandboxPage extends Component {
     render() {
         const CompiledComponent = this.state.compiledComponent.component;
         const CompileException = this.state.compiledComponent.error;
-        const CompileWarnings = this.state.compiledComponent.warnings;
+        const CompileWarnings = this.state.compiledComponent.warnings.join('\n');
+        const time = this.state.compiledComponent.time;
 
         return (
             <div className="sandboxPage">
@@ -74,6 +91,7 @@ class SandboxPage extends Component {
                     { CompileException && <pre className="sandboxPage__feilmelding">{CompileException}</pre> }
                     { CompileWarnings && <pre className="sandboxPage__advarsel">{CompileWarnings}</pre> }
                     { CompiledComponent && <CompiledComponent /> }
+                    { <span className="sandboxPage__time">{`Compiled in ${time.toFixed(0)} ms`}</span>}
                 </div>
             </div>
         );

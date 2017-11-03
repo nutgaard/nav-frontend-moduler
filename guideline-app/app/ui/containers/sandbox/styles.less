@@ -1,4 +1,5 @@
 .sandboxPage {
+  position: relative;
   display: flex;
   min-height: ~"calc(100vh - 203px)";
 
@@ -28,5 +29,11 @@
   }
   &__feilmelding, &__advarsel {
     margin: 0;
+  }
+  &__time {
+    color: #787878;
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
   }
 }
