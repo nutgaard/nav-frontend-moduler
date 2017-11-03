@@ -1,16 +1,28 @@
+import React from 'react';
 import * as Babel from '@babel/standalone';
 
 function requireAll(requireContext) {
     return requireContext.keys().reduce((acc, rc) => ({ ...acc, [rc]: requireContext(rc) }), {});
 }
+function getRequireContext() {
+    if (process.env.NODE_ENV === 'production') { // Pga statisk analyse kan ikke `isProduction` brukes her
+        return require.context('./../../../../../packages/node_modules/', true, /lib\/.*\.jsx?$/);
+    } else {
+        return require.context('./../../../../../packages/node_modules/', true, /src\/.*\.jsx?$/)
+    }
+}
 
+const requireSource = process.env.NODE_ENV === 'production' ? 'lib' : 'src';
 const pkgs = requireAll(require.context('./../../../../../packages/node_modules/', true, /package.json$/));
-const requireContext = require.context('./../../../../../packages/node_modules/', true, /src\/.*\.jsx?$/);
+const requireContext = getRequireContext();
 
 const mainfiles = Object.entries(pkgs)
     .map(([pkgPath, pkg]) => [pkg.name, pkg.main])
     .filter(([pkgName, mainfile]) => !mainfile.endsWith('less'))
-    .reduce((acc, [pkgName, mainfile]) => ({...acc, [pkgName]: requireContext(`./${pkgName}/${mainfile.replace(/^lib/, 'src')}`)}), {});
+    .reduce((acc, [pkgName, mainfile]) => ({
+        ...acc,
+        [pkgName]: requireContext(`./${pkgName}/${mainfile.replace(/^lib/, requireSource)}`)
+    }), {});
 
 mainfiles.react = React;
 
