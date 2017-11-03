@@ -71,7 +71,8 @@ const routeConfig = [
         title: 'Tilgjengelighet'
     },
     {
-        path: '/sandbox',
+        link: '/sandbox',
+        path: '/sandbox/:urlCode?',
         component: SandboxPage,
         title: 'Sandbox'
     }

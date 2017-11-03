@@ -96,7 +96,7 @@ class ExpandableListItem extends Component { // eslint-disable-line react/no-mul
             <li className={this.getClassList()} key={item.title}>
                 <Link
                     className="link"
-                    to={item.path || '#'}
+                    to={item.link || item.path || '#'}
                     onClick={() => { this.props.onItemClicked(item); }}
                 >
                     { item.title }
