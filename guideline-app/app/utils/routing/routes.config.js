@@ -11,6 +11,7 @@ import IconPage from '../../ui/containers/icon/IconPage';
 import ToneOfVoicePage from '../../ui/containers/toneofvoice/ToneOfVoicePage';
 import OurValuesPage from '../../ui/containers/our-values/OurValuesPage';
 import StyleMainPage from '../../ui/containers/style/StyleMainPage';
+import SandboxPage from '../../ui/containers/sandbox/SandboxPage';
 
 const componentRoutes = resolveComponentRoutes('components');
 
@@ -68,6 +69,11 @@ const routeConfig = [
         path: '/accessibility',
         component: AccessibilityPage,
         title: 'Tilgjengelighet'
+    },
+    {
+        path: '/sandbox',
+        component: SandboxPage,
+        title: 'Sandbox'
     }
 ];
 
