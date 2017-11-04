@@ -25,7 +25,8 @@ if (babelRule) {
 WebpackProductionConfig.output = {
     path: path.join(__dirname, '../', 'dist'),
     publicPath: './',
-    filename: '[name].js'
+    filename: '[name].js',
+    chunkFilename: '[name].[chunkhash].js'
 };
 
 module.exports = WebpackProductionConfig;

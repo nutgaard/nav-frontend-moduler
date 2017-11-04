@@ -1,4 +1,5 @@
 import React from 'react';
+import Loadable from 'react-loadable';
 import resolveComponentRoutes from './routes.utils';
 
 import ColorPage from '../../ui/containers/color/ColorPage';
@@ -11,9 +12,15 @@ import IconPage from '../../ui/containers/icon/IconPage';
 import ToneOfVoicePage from '../../ui/containers/toneofvoice/ToneOfVoicePage';
 import OurValuesPage from '../../ui/containers/our-values/OurValuesPage';
 import StyleMainPage from '../../ui/containers/style/StyleMainPage';
-import SandboxPage from '../../ui/containers/sandbox/SandboxPage';
 
 const componentRoutes = resolveComponentRoutes('components');
+import Loader from './../../ui/components/loader/Loader';
+
+const LoadableSandboxPage = Loadable({
+    loader: () => import(/* webpackChunkName: "sandbox" */ '../../ui/containers/sandbox/SandboxPage'),
+    loading: Loader,
+    timeout: 10000, // 10 seconds
+});
 
 const routeConfig = [
     {
@@ -73,7 +80,7 @@ const routeConfig = [
     {
         link: '/sandbox',
         path: '/sandbox/:urlCode?',
-        component: SandboxPage,
+        component: LoadableSandboxPage,
         title: 'Sandbox'
     }
 ];

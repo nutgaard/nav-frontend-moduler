@@ -36,7 +36,8 @@ WebpackDevConfig.devServer = {
 WebpackDevConfig.output = {
     path: path.join(__dirname, 'dist'),
     publicPath: '/dist/',
-    filename: '[name].js'
+    filename: '[name].js',
+    chunkFilename: '[name].[chunkhash].js'
 };
 WebpackDevConfig.resolve.plugins = [
     new DirectoryNamedWebpackPlugin({
