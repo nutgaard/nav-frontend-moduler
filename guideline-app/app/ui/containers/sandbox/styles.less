@@ -1,7 +1,7 @@
 .sandboxPage {
   position: relative;
   display: flex;
-  min-height: ~"calc(100vh - 203px)";
+  height: ~"calc(100vh - 203px)";
 
   &__kode {
     flex: 1;
@@ -9,7 +9,23 @@
   }
   &__textarea {
     margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    & .textarea--medMeta__wrapper, & .skjemaelement__input {
+      height: 100%;
+    }
+    & .skjemaelement__input {
+      overflow-y: auto;
+    }
+
+    & .textarea--medMeta__teller {
+      right: 1.75rem;
+    }
   }
+
+
   &__visning {
     flex: 1;
     margin-left: 0.5rem;
@@ -18,6 +34,8 @@
     border-radius: 4px;
     border: 1px solid #B7B1A9;
     background-color: #efefef;
+    overflow-y: auto;
+    height: ~"calc(100% - 1.85rem)";
 
     &--error {
       background-color: #fff0f0;
@@ -34,6 +52,6 @@
     color: #787878;
     position: absolute;
     bottom: 0.5rem;
-    right: 0.5rem;
+    right: 1.75rem;
   }
 }

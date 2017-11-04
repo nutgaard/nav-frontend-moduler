@@ -3,7 +3,7 @@ import _throttle from 'lodash.throttle';
 import classNames from 'classnames';
 import LZString from 'lz-string';
 import compile from './sandboxUtils';
-import { Textarea } from './../../../../../packages/node_modules/nav-frontend-skjema';
+import SandboxEditor from './SandboxEditor';
 import './styles.less';
 
 const visningsCls = (compiledComponent) => classNames('sandboxPage__visning', {
@@ -68,8 +68,6 @@ class SandboxPage extends Component {
         this.setState({ compiledComponent });
     }, 100);
 
-    tellerTekst = (antallTegn) => `${antallTegn} tegn`;
-
     render() {
         const CompiledComponent = this.state.compiledComponent.component;
         const CompileException = this.state.compiledComponent.error;
@@ -79,13 +77,7 @@ class SandboxPage extends Component {
         return (
             <div className="sandboxPage">
                 <div className="sandboxPage__kode">
-                    <Textarea
-                        label="Kode"
-                        className="sandboxPage__textarea"
-                        value={this.state.value}
-                        onChange={this.update}
-                        tellerTekst={this.tellerTekst}
-                    />
+                    <SandboxEditor value={this.state.value} onChange={this.update} />
                 </div>
                 <div className={visningsCls(this.state.compiledComponent)}>
                     { CompileException && <pre className="sandboxPage__feilmelding">{CompileException}</pre> }
