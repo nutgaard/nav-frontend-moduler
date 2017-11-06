@@ -31,13 +31,19 @@ function prettystack(ex) {
         .filter((line, idx) => idx === 0 || line.includes('|'))
         .join('\n');
 }
+const isolatedScope = [
+    'window',
+    'document',
+    'location',
+    'history'
+];
 
 export default function compile(code) {
     const startTime = performance.now();
     const warnings = [];
     try {
         const compiled = Babel.transform(code, { presets: ["es2015", "react", "stage-2"]});
-        const run = new Function('require', 'exports', 'importlist', compiled.code);
+        const run = new Function('require', 'exports', 'importlist', ...isolatedScope, compiled.code);
         const out = {};
         const mockrequire = (req) => {
             const res = mainfiles[req];
