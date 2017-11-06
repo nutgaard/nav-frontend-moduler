@@ -6,6 +6,13 @@ WebpackProductionConfig.plugins = [
     new HtmlWebpackPlugin({
         template: './guideline-app/index.production.ejs',
         filename: 'index.html',
+        chunks: ["vendors", "scripts"],
+        inject: 'body'
+    }),
+    new HtmlWebpackPlugin({
+        template: './guideline-app/app/ui/containers/sandbox/sandboxRunner.html',
+        filename: 'sandboxRunner.html',
+        chunks: ["vendors", "sandboxRunner"],
         inject: 'body'
     })
 ];
@@ -26,7 +33,7 @@ WebpackProductionConfig.output = {
     path: path.join(__dirname, '../', 'dist'),
     publicPath: './',
     filename: '[name].js',
-    chunkFilename: '[name].[chunkhash].js'
+    chunkFilename: '[name].js'
 };
 
 module.exports = WebpackProductionConfig;

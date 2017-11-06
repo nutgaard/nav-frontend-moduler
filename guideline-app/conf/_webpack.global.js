@@ -13,6 +13,7 @@ const vendors = [
 const GlobalWebpackConfig = {
     entry: {
         scripts: './guideline-app/app/ui/app.js',
+        sandboxRunner: './guideline-app/app/ui/containers/sandbox/SandboxRunner.js',
         vendors
     },
     module: {

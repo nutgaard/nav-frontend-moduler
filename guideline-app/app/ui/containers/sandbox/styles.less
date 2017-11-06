@@ -25,33 +25,25 @@
     }
   }
 
-
-  &__visning {
+  &__iframewrapper {
     flex: 1;
+    position: relative;
+  }
+  &__iframewrapper > * {
     margin-left: 0.5rem;
     margin-top: 1.85rem;
-    padding: 0.45rem;
-    border-radius: 4px;
-    border: 1px solid #B7B1A9;
-    background-color: #efefef;
-    overflow-y: auto;
     height: ~"calc(100% - 1.85rem)";
-
-    &--error {
-      background-color: #fff0f0;
-      color: #d82323;
-    }
-    &--warning {
-      background-color: #fffbe6;
-    }
+    width: 100%;
   }
-  &__feilmelding, &__advarsel {
-    margin: 0;
-  }
-  &__time {
-    color: #787878;
+  &__iframecover {
     position: absolute;
-    bottom: 0.5rem;
-    right: 1.75rem;
+    background-color: rgba(124, 124, 124, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  &__iframe {
+    border: none;
   }
 }

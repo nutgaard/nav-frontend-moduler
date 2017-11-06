@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import _throttle from 'lodash.throttle';
-import classNames from 'classnames';
 import LZString from 'lz-string';
-import compile from './sandboxUtils';
 import SandboxEditor from './SandboxEditor';
+import { Hovedknapp } from './../../../../../packages/node_modules/nav-frontend-knapper';
+import { Element } from './../../../../../packages/node_modules/nav-frontend-typografi';
 import './styles.less';
-
-const visningsCls = (compiledComponent) => classNames('sandboxPage__visning', {
-    'sandboxPage__visning--error': compiledComponent.error,
-    'sandboxPage__visning--warning': compiledComponent.warnings.length > 0
-});
 
 const testScript = `import React from 'react';
 import Panel from 'nav-frontend-paneler';
@@ -50,40 +45,42 @@ function getInitialState(props) {
 
     return {
         value: initialCode,
-        compiledComponent: compile(initialCode)
+        connected: false
     };
 }
 
 class SandboxPage extends Component {
     state = getInitialState(this.props);
+    iframeref = (ref) => this.frame = ref.contentWindow;
+    connect = () => this.setState({ connected: true }, this.compileScript(this.state.value));
     update = (e) => {
         const newCode = e.target.value;
         this.setState({ value: newCode });
         this.compileScript(newCode);
     };
     compileScript = _throttle((newCode) => {
-        const compiledComponent = compile(newCode);
+        console.log('transfering code');
+        this.frame.postMessage({ type: 'code', code: newCode }, "*");
         const urlCode = LZString.compressToEncodedURIComponent(newCode);
         this.props.history.replace(`/sandbox/${urlCode}`);
-        this.setState({ compiledComponent });
     }, 100);
 
-    render() {
-        const CompiledComponent = this.state.compiledComponent.component;
-        const CompileException = this.state.compiledComponent.error;
-        const CompileWarnings = this.state.compiledComponent.warnings.join('\n');
-        const time = this.state.compiledComponent.time;
 
+    render() {
         return (
             <div className="sandboxPage">
                 <div className="sandboxPage__kode">
                     <SandboxEditor value={this.state.value} onChange={this.update} />
                 </div>
-                <div className={visningsCls(this.state.compiledComponent)}>
-                    { CompileException && <pre className="sandboxPage__feilmelding">{CompileException}</pre> }
-                    { CompileWarnings && <pre className="sandboxPage__advarsel">{CompileWarnings}</pre> }
-                    { CompiledComponent && <CompiledComponent /> }
-                    { <span className="sandboxPage__time">{`Compiled in ${time.toFixed(0)} ms`}</span>}
+                <div className="sandboxPage__iframewrapper">
+                    {!this.state.connected && (
+                        <div className="sandboxPage__iframecover">
+                            <Element>Kjøring av kode andre har skrevet medfører en risiko.</Element>
+                            <Element className="blokk-m">Aldri skriv inn sensitive data, eller brukernavn og passord i denne løsningen.</Element>
+                            <Hovedknapp onClick={this.connect}>Last inn</Hovedknapp>
+                        </div>
+                    )}
+                    <iframe src="./sandboxRunner.html" ref={this.iframeref} sandbox="allow-scripts" className="sandboxPage__iframe"/>
                 </div>
             </div>
         );
