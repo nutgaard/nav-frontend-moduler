@@ -80,7 +80,7 @@ class SandboxPage extends Component {
                             <Hovedknapp onClick={this.connect}>Last inn</Hovedknapp>
                         </div>
                     )}
-                    <iframe src="./sandboxRunner.html" ref={this.iframeref} sandbox="allow-scripts" className="sandboxPage__iframe"/>
+                    <iframe src="sandboxRunner.html" ref={this.iframeref} sandbox="allow-scripts" className="sandboxPage__iframe"/>
                 </div>
             </div>
         );

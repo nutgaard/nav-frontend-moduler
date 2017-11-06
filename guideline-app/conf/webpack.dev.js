@@ -29,7 +29,12 @@ const pathToModules = './../../packages/node_modules';
 babelRule = addModuleIncludePaths(babelRule, pathToModules);
 
 WebpackDevConfig.devServer = {
-    historyApiFallback: true,
+    historyApiFallback: {
+        verbose: true,
+        rewrites: [
+            { from: /^\/?sandboxRunner.html/, to: '/dist/sandboxRunner.html' }
+        ]
+    },
     contentBase: [path.join(__dirname, './../'), path.join(__dirname, './../../packages/')],
     watchContentBase: true
 };

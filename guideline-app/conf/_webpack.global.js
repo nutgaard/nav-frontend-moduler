@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const vendors = [
@@ -79,6 +80,18 @@ const GlobalWebpackConfig = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendors'
+        }),
+        new HtmlWebpackPlugin({
+            template: './guideline-app/index.production.ejs',
+            filename: 'index.html',
+            chunks: ["vendors", "scripts"],
+            inject: 'body'
+        }),
+        new HtmlWebpackPlugin({
+            template: './guideline-app/index.production.ejs',
+            filename: 'sandboxRunner.html',
+            chunks: ["vendors", "sandboxRunner"],
+            inject: 'body'
         })
     ]
 };

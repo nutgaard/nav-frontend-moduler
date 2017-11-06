@@ -1,21 +1,5 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackProductionConfig = require('./_webpack.global');
-
-WebpackProductionConfig.plugins = [
-    new HtmlWebpackPlugin({
-        template: './guideline-app/index.production.ejs',
-        filename: 'index.html',
-        chunks: ["vendors", "scripts"],
-        inject: 'body'
-    }),
-    new HtmlWebpackPlugin({
-        template: './guideline-app/app/ui/containers/sandbox/sandboxRunner.html',
-        filename: 'sandboxRunner.html',
-        chunks: ["vendors", "sandboxRunner"],
-        inject: 'body'
-    })
-];
 
 const babelRule = WebpackProductionConfig.module.rules.find((rule) => (rule.loader === 'babel-loader'));
 
