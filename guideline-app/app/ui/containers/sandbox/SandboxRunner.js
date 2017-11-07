@@ -1,14 +1,8 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
-import classNames from "classnames";
 import compile from "./sandboxUtils";
 import createErrorboundary from './SandboxErrorboundary';
 import "./frame.less";
-
-const visningsCls = (compiledComponent) => classNames('sandboxPage__visning', {
-    'sandboxPage__visning--error': compiledComponent.error,
-    'sandboxPage__visning--warning': compiledComponent.warnings.length > 0
-});
 
 class Sandbox extends Component {
     state = {
@@ -42,7 +36,7 @@ class Sandbox extends Component {
         const time = this.state.compiledComponent.time;
 
         const renderElement = (
-            <div className={visningsCls(this.state.compiledComponent)}>
+            <div className="sandboxPage__visning">
                 { CompileException && <pre className="sandboxPage__feilmelding">{CompileException}</pre> }
                 { CompileWarnings && <pre className="sandboxPage__advarsel">{CompileWarnings}</pre> }
                 { CompiledComponent && <CompiledComponent /> }
@@ -50,16 +44,12 @@ class Sandbox extends Component {
             </div>
         );
 
-        try {
-            ReactDOM.unstable_renderSubtreeIntoContainer(this, renderElement, this.renderref);
-        } catch (e) {
-            console.log('cauth render error', e);
-        }
+        ReactDOM.unstable_renderSubtreeIntoContainer(this, renderElement, this.renderref);
     }
 
     render() {
         return (
-            <div ref={this.setRenderref} />
+            <div className="sandboxPage__visningwrapper" ref={this.setRenderref} />
         );
     }
 }

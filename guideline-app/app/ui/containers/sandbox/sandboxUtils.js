@@ -41,9 +41,8 @@ const isolatedScope = [
 const tryCatchString = `
 exports.default = function() {
   try {
-    return _default();
+    return _react.default.createElement('div', { className: 'sandboxPage__renderview' }, _default());
   } catch (inscriptError) {
-    console.error('inscriptError', inscriptError);
     return _react.default.createElement('pre', { className: 'sandboxPage__feilmelding' }, inscriptError.toString());
   }
 };
