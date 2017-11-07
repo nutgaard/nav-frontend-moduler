@@ -20,7 +20,6 @@ class Sandbox extends Component {
     };
     listener = (evt) => {
         if (evt.data.type === 'code') {
-            console.log('evt', evt);
             const compiledComponent = compile(evt.data.code);
             this.setState({compiledComponent});
         }

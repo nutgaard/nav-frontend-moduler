@@ -52,14 +52,17 @@ function getInitialState(props) {
 class SandboxPage extends Component {
     state = getInitialState(this.props);
     iframeref = (ref) => this.frame = ref.contentWindow;
-    connect = () => this.setState({ connected: true }, this.compileScript(this.state.value));
+    connect = () => this.setState({ connected: true }, () => this.compileScript(this.state.value));
     update = (e) => {
         const newCode = e.target.value;
         this.setState({ value: newCode });
         this.compileScript(newCode);
     };
     compileScript = _throttle((newCode) => {
-        console.log('transfering code');
+        if (!this.state.connected) {
+            return;
+        }
+
         this.frame.postMessage({ type: 'code', code: newCode }, "*");
         const urlCode = LZString.compressToEncodedURIComponent(newCode);
         this.props.history.replace(`/sandbox/${urlCode}`);
