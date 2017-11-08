@@ -4,6 +4,7 @@ import LZString from 'lz-string';
 import SandboxEditor from './SandboxEditor';
 import { Hovedknapp } from './../../../packages/node_modules/nav-frontend-knapper';
 import { Element } from './../../../packages/node_modules/nav-frontend-typografi';
+import * as Router from './../router.js';
 import './styles.less';
 
 const testScript = `import React from 'react';
@@ -39,7 +40,7 @@ export default TestComp;`;
 function getInitialState() {
     let initialCode = testScript;
 
-    const urlCode = window.location.pathname.slice(1);
+    const urlCode = Router.getHash();
     if (urlCode && urlCode.length > 0) {
         initialCode = LZString.decompressFromEncodedURIComponent(urlCode);
     }
@@ -66,7 +67,7 @@ class SandboxPage extends Component {
 
         this.frame.postMessage({ type: 'code', code: newCode }, "*");
         const urlCode = LZString.compressToEncodedURIComponent(newCode);
-        window.history.replaceState({}, 'Designsystemet - Sandbox', `./${urlCode}`);
+        Router.replaceHash(urlCode);
     }, 100);
 
 
