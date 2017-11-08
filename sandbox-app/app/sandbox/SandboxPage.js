@@ -36,12 +36,13 @@ function TestComp() {
 
 export default TestComp;`;
 
-function getInitialState(props) {
+function getInitialState() {
     let initialCode = testScript;
 
-    // if (props.match.params.urlCode && props.match.params.urlCode.length > 0) {
-    //     initialCode = LZString.decompressFromEncodedURIComponent(props.match.params.urlCode);
-    // }
+    const urlCode = window.location.pathname.slice(1);
+    if (urlCode && urlCode.length > 0) {
+        initialCode = LZString.decompressFromEncodedURIComponent(urlCode);
+    }
 
     return {
         value: initialCode,
@@ -50,7 +51,7 @@ function getInitialState(props) {
 }
 
 class SandboxPage extends Component {
-    state = getInitialState(this.props);
+    state = getInitialState();
     iframeref = (ref) => this.frame = ref.contentWindow;
     connect = () => this.setState({ connected: true }, () => this.compileScript(this.state.value));
     update = (e) => {
@@ -65,7 +66,7 @@ class SandboxPage extends Component {
 
         this.frame.postMessage({ type: 'code', code: newCode }, "*");
         const urlCode = LZString.compressToEncodedURIComponent(newCode);
-        this.props.history.replace(`/sandbox/${urlCode}`);
+        window.history.replaceState({}, 'Designsystemet - Sandbox', `./${urlCode}`);
     }, 100);
 
 
