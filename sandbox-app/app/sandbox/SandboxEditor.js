@@ -1,4 +1,6 @@
 import React from 'react';
+import './../../../packages/node_modules/nav-frontend-typografi-style';
+import './../../../packages/node_modules/nav-frontend-skjema-style';
 
 const tellerTekst = (antallTegn) => `${antallTegn} tegn`;
 

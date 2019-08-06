@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import _throttle from 'lodash.throttle';
 import LZString from 'lz-string';
 import SandboxEditor from './SandboxEditor';
-import { Hovedknapp } from './../../../../../packages/node_modules/nav-frontend-knapper';
-import { Element } from './../../../../../packages/node_modules/nav-frontend-typografi';
+import { Hovedknapp } from './../../../packages/node_modules/nav-frontend-knapper';
+import { Element } from './../../../packages/node_modules/nav-frontend-typografi';
+import * as Router from './../router.js';
 import './styles.less';
 
 const testScript = `import React from 'react';
@@ -36,11 +37,12 @@ function TestComp() {
 
 export default TestComp;`;
 
-function getInitialState(props) {
+function getInitialState() {
     let initialCode = testScript;
 
-    if (props.match.params.urlCode && props.match.params.urlCode.length > 0) {
-        initialCode = LZString.decompressFromEncodedURIComponent(props.match.params.urlCode);
+    const urlCode = Router.getHash();
+    if (urlCode && urlCode.length > 0) {
+        initialCode = LZString.decompressFromEncodedURIComponent(urlCode);
     }
 
     return {
@@ -50,7 +52,7 @@ function getInitialState(props) {
 }
 
 class SandboxPage extends Component {
-    state = getInitialState(this.props);
+    state = getInitialState();
     iframeref = (ref) => this.frame = ref.contentWindow;
     connect = () => this.setState({ connected: true }, () => this.compileScript(this.state.value));
     update = (e) => {
@@ -65,7 +67,7 @@ class SandboxPage extends Component {
 
         this.frame.postMessage({ type: 'code', code: newCode }, "*");
         const urlCode = LZString.compressToEncodedURIComponent(newCode);
-        this.props.history.replace(`/sandbox/${urlCode}`);
+        Router.replaceHash(urlCode);
     }, 100);
 
 
@@ -78,8 +80,8 @@ class SandboxPage extends Component {
                 <div className="sandboxPage__iframewrapper">
                     {!this.state.connected && (
                         <div className="sandboxPage__iframecover">
-                            <Element>Kjøring av kode andre har skrevet medfører en risiko.</Element>
-                            <Element className="blokk-m">Aldri skriv inn sensitive data, eller brukernavn og passord i denne løsningen.</Element>
+                            <Element className="text-center">Kjøring av kode andre har skrevet medfører en risiko.</Element>
+                            <Element className="blokk-m text-center">Aldri skriv inn sensitive data, eller brukernavn og passord i denne løsningen.</Element>
                             <Hovedknapp onClick={this.connect}>Last inn</Hovedknapp>
                         </div>
                     )}

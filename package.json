@@ -28,7 +28,10 @@
     "watch": "npm start",
     "start-guideline-app": "webpack-dev-server --hot --inline --config guideline-app/conf/webpack.dev.js",
     "build-guideline-app": "webpack -p --config guideline-app/conf/webpack.production.js",
-    "deploy-guideline-app": "npm run build-guideline-app && gh-pages -d guideline-app/dist"
+    "deploy-guideline-app": "npm run build-guideline-app && gh-pages -d guideline-app/dist",
+    "start-sandbox-app": "webpack-dev-server --hot --inline --config sandbox-app/conf/webpack.dev.js",
+    "build-sandbox-app": "webpack -p --config sandbox-app/conf/webpack.production.js",
+    "deploy-sandbox-app": "npm run build-sandbox-app"
   },
   "author": "NAV",
   "license": "SEE LICENSE IN LICENSE",
@@ -94,7 +97,6 @@
     "react-dom": "^15.6.0",
     "react-height": "^3.0.0",
     "react-highlight": "^0.10.0",
-    "react-loadable": "^5.3.1",
     "react-markdown": "^2.4.4",
     "react-modal": "^2.2.4",
     "react-motion": "^0.5.0",

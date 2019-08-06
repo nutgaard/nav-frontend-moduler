@@ -6,14 +6,14 @@ function requireAll(requireContext) {
 }
 function getRequireContext() {
     if (process.env.NODE_ENV === 'production') { // Pga statisk analyse kan ikke `isProduction` brukes her
-        return require.context('./../../../../../packages/node_modules/', true, /lib\/.*\.jsx?$/);
+        return require.context('./../../../packages/node_modules/', true, /lib\/.*\.jsx?$/);
     } else {
-        return require.context('./../../../../../packages/node_modules/', true, /src\/.*\.jsx?$/)
+        return require.context('./../../../packages/node_modules/', true, /src\/.*\.jsx?$/)
     }
 }
 
 const requireSource = process.env.NODE_ENV === 'production' ? 'lib' : 'src';
-const pkgs = requireAll(require.context('./../../../../../packages/node_modules/', true, /package.json$/));
+const pkgs = requireAll(require.context('./../../../packages/node_modules/', true, /package.json$/));
 const requireContext = getRequireContext();
 
 const mainfiles = Object.entries(pkgs)
